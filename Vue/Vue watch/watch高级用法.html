@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <title>watch</title>
+</head>
+<body>
+  <div id="app">
+    <button v-on:click="btnClick">{{message}}</button>
+    <button v-on:click="btnClick2">{{message2}}</button>
+    <br>
+    <br>
+    <ul>
+      <li v-for="(value,key) in info" :key="key">
+        {{key}} -- {{value}}
+      </li>
+    </ul>
+    <button v-on:click="updateInfo">修改info</button>
+  </div>
+  <script>
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello',
+        message2: 'World',
+        info:{
+          name: 'cc',
+          age: 22,
+          height: 190
+        }
+      },
+      methods: {
+        btnClick() {
+          this.message = 'Wolrd'
+        },
+        btnClick2() {
+          this.message2 = '222'
+        },
+        updateInfo() {
+          this.info.name = 'ccc',
+          this.info.age = 18
+        }
+      },
+      watch: {
+        // watch 监听方法1
+        // 缺陷: 页面初次渲染不会触发监听
+        message2 (newValue,oldValue) {
+          console.log('function',newValue,)
+        },
+        // watch 监听方法2
+        message: {
+          handler(newValue,oldValue) {
+            console.log('immediate:true',newValue)
+          },
+          // 此属性表示页面初次加载是否立即执行,如果等于false则跟第一种方式一样
+          immediate: true
+        },
+        info: {
+          handler(newValue,oldValue) {
+            console.log('deep',newValue)
+          },
+          // 监听复杂类型数据 需要添加deep: true 否则监听不到数据变化
+          deep: true
+        }
+      }
+    })
+  </script>
+</body>
+</html>
